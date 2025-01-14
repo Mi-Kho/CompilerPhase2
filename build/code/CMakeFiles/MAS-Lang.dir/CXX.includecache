@@ -57,6 +57,8 @@ sstream
 -
 stack
 -
+precheck.h
+/home/milad/compiler/CompilerPhase2/code/precheck.h
 
 /home/milad/compiler/CompilerPhase2/code/Error.cpp
 Error.h

@@ -60,15 +60,16 @@ int main(int argc, const char** argv)
 
 	Token nextToken;
 
-	Check checker(contentRef);
-	Remove remove_code(checker);
-	std::string code = remove_code.pointer_to_string();
-	std::cout << "\nOptimized code: \n" << code << "\n---------------\n" << std::endl;
-	contentRef = code;
+	// Check checker(contentRef);
+	// Remove remove_code(checker);
+	// std::string code = remove_code.pointer_to_string();
+	// std::cout << "\nOptimized code: \n" << code << "\n---------------\n" << std::endl;
+	// contentRef = code;
 
 	PropagationAndFolding pro(contentRef);
 	CFoi Cfolding(pro);
-	code = Cfolding.pointer_to_string();
+	std::string code = Cfolding.pointer_to_string();
+    //code = Cfolding.pointer_to_string();
 	std::cout << "\nOptimized code: \n" << code << "\n---------------\n" << std::endl;
 	contentRef = code;
 
