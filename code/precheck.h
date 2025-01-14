@@ -174,7 +174,7 @@ public:
 
         for (size_t i=0; i<live_lines.size(); i++) {
 
-            if(!is_left_side(live_lines[i] , live_variables))
+            if(!is_left_side(live_lines[i]))
                 continue;
 
             const char* Buffer = live_lines[i];

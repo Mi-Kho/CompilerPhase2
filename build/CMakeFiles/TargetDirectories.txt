@@ -1,0 +1,8 @@
+/home/milad/compiler/CompilerPhase2/build/CMakeFiles/rebuild_cache.dir
+/home/milad/compiler/CompilerPhase2/build/CMakeFiles/acc_gen.dir
+/home/milad/compiler/CompilerPhase2/build/CMakeFiles/edit_cache.dir
+/home/milad/compiler/CompilerPhase2/build/CMakeFiles/omp_gen.dir
+/home/milad/compiler/CompilerPhase2/build/CMakeFiles/intrinsics_gen.dir
+/home/milad/compiler/CompilerPhase2/build/code/CMakeFiles/edit_cache.dir
+/home/milad/compiler/CompilerPhase2/build/code/CMakeFiles/rebuild_cache.dir
+/home/milad/compiler/CompilerPhase2/build/code/CMakeFiles/MAS-Lang.dir

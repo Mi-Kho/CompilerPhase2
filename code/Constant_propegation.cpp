@@ -1,4 +1,4 @@
-
+#pragma once
 #include <string>
 #include <iostream>
 #include <unordered_map>
@@ -13,7 +13,7 @@
 
 using namespace std;
 
-namespace charinfo {
+/*namespace charinfo {
 
     LLVM_READNONE inline bool isWhitespace(char c) {
         return c == ' ' || c == '\t' || c == '\f' ||
@@ -37,7 +37,7 @@ namespace charinfo {
         return c == '=';
     }
 
-}
+}*/
 
 class PropagationAndFolding {
 
@@ -312,11 +312,56 @@ public:
     }
 
     std::vector<std::string> cons_fold(std::vector<std::string> variables, std::vector<std::vector<char*>> lines) {
-        std::vector<char*> live_lines = lines[0];
-        std::vector<std::string> new_lines;
-        for (size_t i=0; i<live_lines.size(); i++) {
 
-            const char* Buffer = live_lines[i];
+        for (const auto& line : lines) {
+            for (const auto& l : line) {
+                cout << l;
+                cout << "\n";
+            }
+            cout << "\n";
+        }
+
+        std::vector<char*> splitResults;
+
+    // Iterate through each char* in the lines vector
+        for (char* line : lines[0]) {
+            // Convert char* to std::string
+            std::string strLine(line);
+        
+            // Split the string by ';'
+            std::stringstream ss(strLine);
+            std::string item;
+            while (std::getline(ss, item, ';')) {
+                char* cstr = strdup(item.c_str()); // Use strdup to allocate and copy
+            
+            // Allocate additional memory for the ';' character and null terminator
+            char* cstrWithSemicolon = (char*)malloc(strlen(cstr) + 2); // +1 for ';' +1 for '\0'
+            if (cstrWithSemicolon) {
+                strcpy(cstrWithSemicolon, cstr); // Copy the original string
+                cstrWithSemicolon[strlen(cstr)] = ';'; // Add the ';' character
+                cstrWithSemicolon[strlen(cstr) + 1] = '\0'; // Null terminate the new string
+                splitResults.push_back(cstrWithSemicolon); // Store the new string
+            }
+            free(cstr); // Free the original cs
+            }
+        }
+
+        // Output the results
+        for (const char* result : splitResults) {
+            std::cout << result << std::endl;
+        }
+
+        std::vector<char*> live_lines = splitResults;
+        cout << live_lines.size() << "\n";
+        std::vector<std::string> new_lines;
+        int o = 0;
+        for (const auto& lin : live_lines/*size_t i=0; i<live_lines.size(); i++*/) {
+            
+            cout << "319\n";
+            const char* Buffer = lin;
+            cout << "320 \n";
+            while (charinfo::isWhitespace(*Buffer)) ++Buffer;
+            cout << "322 \n";
 
             // checking left side of "=" and store it in Context1
             while (!charinfo::isLetter(*Buffer) && !charinfo::isSemiColon(*Buffer)) ++Buffer;
@@ -327,15 +372,28 @@ public:
             while ((charinfo::isLetter(*end) || charinfo::isDigit(*end)) )
                 ++end;
 
+            cout << "333 \n";
             llvm::StringRef Context1(Buffer, end - Buffer);
             string con1 = (string)Context1;
+            if(con1=="int") {
+               Buffer = end;
+               while (charinfo::isWhitespace(*Buffer)) ++Buffer;
+               end = Buffer + 1;
 
+
+               while ((charinfo::isLetter(*end) || charinfo::isDigit(*end)) )
+                ++end; 
+                llvm::StringRef Context1(Buffer, end - Buffer);con1 = (string)Context1;
+            }
+            cout << con1 << "\n";
             Buffer = end;
                 
             // checking right side of "=" and store them in s array
             while (charinfo::isWhitespace(*Buffer)) ++Buffer;
-                
+            
             if(charinfo::isEqual(*Buffer)){
+                cout << "343 \n";
+
                 Buffer++;
 
                 while (charinfo::isWhitespace(*Buffer)) ++Buffer;    
@@ -351,9 +409,17 @@ public:
                     
                     const char* end = Buffer + 1;
                     while(charinfo::isLetter(*end) || charinfo::isDigit(*end)) end++; 
+                    cout << "360 \n";
 
                     llvm::StringRef Context2(Buffer, end - Buffer);
-                    s[x] = to_string(constant_table[(std::string) Context2]);
+                    string jvd = (std::string) Context2;
+                    if(jvd[0]>= '0' && jvd[0] <= '9') {
+                    s[x] = jvd;
+
+                    } else {
+                    s[x] = to_string(constant_table[jvd]);
+                    
+                    }
                     x++;
 
                     Buffer = end;
@@ -371,18 +437,18 @@ public:
 
                 bool canPropagate = true;
                 string m = "";
-                for( int z = 0 ; z < x ; z++ ){ // check if there is any value in s array which is not a number => Age Hame adad bashan propagation okeye dige✅
+                /*for( int z = 0 ; z < x ; z++ ){ // check if there is any value in s array which is not a number => Age Hame adad bashan propagation okeye dige✅
 
                     if(s[z] == "+" || s[z] == "-" || s[z] =="/" || s[z] =="*" ) continue;
 
                     if(!(47 < s[z][0] && s[z][0] > 58)) { // if first letter is a number so it can not be a name for variables.
                         
 
-                        canPropagate = false;
+                        canPropagate = ;
                         break;
 
                     }
-                }
+                }*/
 
                 for( int z = 0 ; z < x ; z++ ){ // check if there is any value in s array which is not a number => Age Hame adad bashan propagation okeye dige✅
 
@@ -394,15 +460,28 @@ public:
                 if( canPropagate ) {
 
                     int calculatedNum = evaluateExpression(m); // calculatedNum is the final number which should be placed instead of the right side of variable. 
-                    
+                    cout << calculatedNum << "\n";
                     // from here we make propagation 👇
                     constant_table[con1] = calculatedNum;
-                    new_lines[i] = con1 + " = " + to_string(calculatedNum);  
+                    cout << "this is test " << con1 << "\n";
+                    new_lines.push_back("");
+                    new_lines[o].append(con1).append(" = ").append(to_string(calculatedNum));
+                    printf("===\n");  
                 }
 
-                ++Buffer;
+                
             }
+            o++;
         }
+
+        for (auto line : new_lines ) {
+            cout << line << "\n";
+        }
+        for (const auto& pair : constant_table) {
+            std::cout << pair.first << ": " << pair.second << std::endl;
+        }
+
+
         return new_lines;
     }
 

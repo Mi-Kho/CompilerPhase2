@@ -68,7 +68,7 @@ int main(int argc, const char** argv)
 
 	PropagationAndFolding pro(contentRef);
 	CFoi Cfolding(pro);
-	std::string code = Cfolding.pointer_to_string();
+	code = Cfolding.pointer_to_string();
 	std::cout << "\nOptimized code: \n" << code << "\n---------------\n" << std::endl;
 	contentRef = code;
 
