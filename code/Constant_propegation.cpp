@@ -100,6 +100,7 @@ public:
     }
 
     bool evaluateBooleanExpression(const std::string& expression) {
+        //cout << expression << endl;
         if(expression == "true") {
             return true;
         } else if(expression == "false") {
@@ -406,8 +407,20 @@ public:
 
             //cout << "333 \n";
             int e = 0 ;
+            bool cons = false;
             llvm::StringRef Context1(Buffer, end - Buffer);
             string con1 = (string)Context1;
+            if(con1=="const") {
+               cons = true;
+               Buffer = end;
+               while (charinfo::isWhitespace(*Buffer)) ++Buffer;
+               end = Buffer + 1;
+
+
+               while ((charinfo::isLetter(*end) || charinfo::isDigit(*end)) )
+                ++end; 
+                llvm::StringRef Context1(Buffer, end - Buffer);con1 = (string)Context1;
+            }
             if(con1=="int") {
                e = 1;
                Buffer = end;
@@ -443,10 +456,16 @@ public:
                 if(boolean_table[con1]) {
                     constant_table[con1] = 0;
                     new_lines.push_back("");
+                    if(cons) {
+                        new_lines[o].append("const ");
+                    }
                     new_lines[o].append("bool ").append(con1).append(" ;\n");
                 } else {
                     constant_table[con1] = 0;
                     new_lines.push_back("");
+                    if(cons) {
+                        new_lines[o].append("const ");
+                    }
                    new_lines[o].append("int ").append(con1).append(" ;\n");
                 }
                 o++;
@@ -479,8 +498,14 @@ public:
                     s.append(" ");
 
                     } else {
+                        if(jvd == "true") {
+                            s.append("true");
+                        } else if(jvd == "false") {
+                            s.append("false");
+                        } else {
                        s.append(to_string(constant_table[jvd]));
                        s.append(" ");
+                        }
                     
                     }
                     Buffer = end;
@@ -503,6 +528,7 @@ public:
                 int calculatedNum;
                 if(boolean_table[con1]) {
                     boltype = evaluateBooleanExpression(s);
+                   // cout << boltype << endl;
                 } else {
                   calculatedNum = evaluateExpression(s);
                 } 
@@ -524,8 +550,14 @@ public:
                 // cout << "this is test " << con1 << "\n";
                  new_lines.push_back("");
                  if(first && boolean_table[con1]) {
+                    if(cons) {
+                        new_lines[o].append("const ");
+                    }
                     new_lines[o].append("bool ");
                  } else if(first && !boolean_table[con1]){
+                    if(cons) {
+                        new_lines[o].append("const ");
+                    }
                    new_lines[o].append("int "); 
                  }
                 new_lines[o].append(con1).append(" = ");
