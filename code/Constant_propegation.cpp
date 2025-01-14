@@ -10,6 +10,7 @@
 #include <iostream>
 #include <sstream>
 #include <stack>
+#include "precheck.h"
 
 using namespace std;
 
@@ -399,8 +400,7 @@ public:
                 while (charinfo::isWhitespace(*Buffer)) ++Buffer;    
 
 
-                string s[10];  // for variables or numbers which are right side of "="
-                int x = 0;
+                string s;  // for variables or numbers which are right side of "="
 
                 while (!charinfo::isSemiColon(*Buffer)){
 
@@ -414,19 +414,17 @@ public:
                     llvm::StringRef Context2(Buffer, end - Buffer);
                     string jvd = (std::string) Context2;
                     if(jvd[0]>= '0' && jvd[0] <= '9') {
-                    s[x] = jvd;
+                    s.append(jvd);
 
                     } else {
-                    s[x] = to_string(constant_table[jvd]);
+                       s.append(to_string(constant_table[jvd]));
                     
                     }
-                    x++;
-
                     Buffer = end;
+                    while(charinfo::isWhitespace(*Buffer)) Buffer++;
                     if(*Buffer == '+' || *Buffer =='-' || *Buffer =='/' || *Buffer =='*' ){
 
-                        s[x] = *Buffer; 
-                        x++;
+                        s = s + *Buffer; 
                         Buffer++;
 
                     }
@@ -436,32 +434,11 @@ public:
                 }
 
                 bool canPropagate = true;
-                string m = "";
-                /*for( int z = 0 ; z < x ; z++ ){ // check if there is any value in s array which is not a number => Age Hame adad bashan propagation okeye dige✅
-
-                    if(s[z] == "+" || s[z] == "-" || s[z] =="/" || s[z] =="*" ) continue;
-
-                    if(!(47 < s[z][0] && s[z][0] > 58)) { // if first letter is a number so it can not be a name for variables.
-                        
-
-                        canPropagate = ;
-                        break;
-
-                    }
-                }*/
-
-                for( int z = 0 ; z < x ; z++ ){ // check if there is any value in s array which is not a number => Age Hame adad bashan propagation okeye dige✅
-
-                    m.append(s[z]);
-                    m.append(" ");
-                }
-
 
                 if( canPropagate ) {
 
-                    int calculatedNum = evaluateExpression(m); // calculatedNum is the final number which should be placed instead of the right side of variable. 
+                    int calculatedNum = evaluateExpression(s); // calculatedNum is the final number which should be placed instead of the right side of variable. 
                     cout << calculatedNum << "\n";
-                    // from here we make propagation 👇
                     constant_table[con1] = calculatedNum;
                     cout << "this is test " << con1 << "\n";
                     new_lines.push_back("");
