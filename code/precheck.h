@@ -169,7 +169,7 @@ public:
                   char*& last_result_line){
 
         std::vector<char*> live_lines = lines[0];       // first variable (result) is always live
-
+    
         std::reverse(live_lines.begin(), live_lines.end());
 
         for (size_t i=0; i<live_lines.size(); i++) {
@@ -265,7 +265,7 @@ public:
                 if (Context != "int" && Context != var) {
 
                     bool duplicate = false;
-
+                    
                     for (const auto& element1 : live_variables) {
 
                         if(element1 == Context){
@@ -460,3 +460,16 @@ public:
 
 };
 #endif
+
+int result = 2
+int a = 2; //
+int a =5;
+int b = 6 //
+int b = a *2
+result = b + result
+
+
+int a = 5
+int b = a * 2
+int result = 6
+int result = b + result
