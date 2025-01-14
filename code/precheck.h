@@ -174,7 +174,7 @@ public:
 
         for (size_t i=0; i<live_lines.size(); i++) {
 
-            if(!is_left_side(live_lines[i]))
+            if(!is_left_side(live_lines[i] , live_variables))
                 continue;
 
             const char* Buffer = live_lines[i];
@@ -359,7 +359,6 @@ public:
                                    std::vector<char*>& final_lines,
                                    char* last_result_line){
 
-
         for (size_t i=0; i<live_variables.size(); i++) {
 
             std::vector<char*> live_lines;
@@ -460,16 +459,3 @@ public:
 
 };
 #endif
-
-int result = 2
-int a = 2; //
-int a =5;
-int b = 6 //
-int b = a *2
-result = b + result
-
-
-int a = 5
-int b = a * 2
-int result = 6
-int result = b + result

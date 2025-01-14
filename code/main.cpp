@@ -9,6 +9,8 @@
 #include "Sema.h"
 #include "precheck.h"
 #include "remove_code.h"
+#include "Constant_propegation.cpp"
+#include "Cns.cpp"
 
 
 using namespace std;
@@ -61,6 +63,12 @@ int main(int argc, const char** argv)
 	Check checker(contentRef);
 	Remove remove_code(checker);
 	std::string code = remove_code.pointer_to_string();
+	std::cout << "\nOptimized code: \n" << code << "\n---------------\n" << std::endl;
+	contentRef = code;
+
+	PropagationAndFolding pro(contentRef);
+	CFoi Cfolding(pro);
+	std::string code = Cfolding.pointer_to_string();
 	std::cout << "\nOptimized code: \n" << code << "\n---------------\n" << std::endl;
 	contentRef = code;
 
